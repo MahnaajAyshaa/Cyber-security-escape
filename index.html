@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPERATION: CYBER RESCUE | Tech Trilogy</title>
+    <style>
+        :root {
+            --bg-deep: #100224;
+            --surface: #1a0836;
+            --surface-border: #a800ff55;
+            --neon-blue: #00f0ff;
+            --neon-pink: #ff33cc;
+            --neon-magenta: #d900ff;
+            --neon-violet: #8b00ff;
+            --neon-yellow: #ffcc00;
+            --neon-red: #ff2255;
+            --text-main: #f1f5f9;
+            --text-dim: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Courier New', Courier, monospace, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Tech Trilogy Intro Splash */
+        #intro-splash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0118;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+            animation: fadeOutSplash 1s ease 2.5s forwards;
+        }
+
+        .trilogy-text {
+            font-size: 2.8rem;
+            color: var(--neon-blue);
+            letter-spacing: 8px;
+            text-shadow: 0 0 20px var(--neon-blue), 0 0 40px var(--neon-magenta), 0 0 60px var(--neon-violet);
+            animation: pulseIntro 1.5s infinite alternate;
+        }
+
+        .trilogy-sub {
+            font-size: 1.2rem;
+            color: var(--neon-pink);
+            margin-top: 15px;
+            letter-spacing: 4px;
+        }
+
+        @keyframes pulseIntro {
+            from { transform: scale(0.95); opacity: 0.8; }
+            to { transform: scale(1.05); opacity: 1; text-shadow: 0 0 35px var(--neon-pink), 0 0 70px var(--neon-blue); }
+        }
+
+        @keyframes fadeOutSplash {
+            0% { opacity: 1; visibility: visible; }
+            100% { opacity: 0; visibility: hidden; }
+        }
+
+        /* Canvas for 4K Smoke, DNA Double Helix & Floating Particles */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Falcon Wings on Both Left & Right Sides */
+        .falcon-wing-left, .falcon-wing-right {
+            position: fixed;
+            top: 15%;
+            width: 130px;
+            height: 380px;
+            z-index: 2;
+            pointer-events: none;
+            opacity: 0.8;
+            filter: drop-shadow(0 0 20px var(--neon-pink));
+        }
+        .falcon-wing-left {
+            left: 10px;
+            animation: flameFlickerLeft 3s infinite alternate ease-in-out;
+        }
+        .falcon-wing-right {
+            right: 10px;
+            transform: scaleX(-1);
+            animation: flameFlickerRight 3s infinite alternate ease-in-out;
+        }
+
+        @keyframes flameFlickerLeft {
+            0% { transform: translateY(0) scale(1) rotate(-2deg); opacity: 0.6; }
+            100% { transform: translateY(-12px) scale(1.05) rotate(2deg); opacity: 0.9; }
+        }
+        @keyframes flameFlickerRight {
+            0% { transform: scaleX(-1) translateY(0) scale(1) rotate(2deg); opacity: 0.6; }
+            100% { transform: scaleX(-1) translateY(-12px) scale(1.05) rotate(-2deg); opacity: 0.9; }
+        }
+
+        /* Neon-Purple Flames on Left & Right Borders */
+        .neon-flame-left, .neon-flame-right {
+            position: fixed;
+            top: 0;
+            width: 60px;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        .neon-flame-left {
+            left: 0;
+            background: linear-gradient(90deg, rgba(255,34,85,0.6), rgba(217,0,255,0.4), transparent);
+            box-shadow: inset 15px 0 30px var(--neon-red);
+        }
+        .neon-flame-right {
+            right: 0;
+            background: linear-gradient(270deg, rgba(255,34,85,0.6), rgba(217,0,255,0.4), transparent);
+            box-shadow: inset -15px 0 30px var(--neon-red);
+        }
+
+        .container {
+            position: relative;
+            z-index: 3;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .screen {
+            display: none;
+        }
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Welcome Screen */
+        .welcome-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 85vh;
+            text-align: center;
+        }
+
+        .falcon-circuit-logo {
+            width: 130px;
+            height: 130px;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 15px var(--neon-red));
+            animation: logoGlow 2s infinite alternate;
+        }
+
+        @keyframes logoGlow {
+            from { filter: drop-shadow(0 0 10px var(--neon-red)); }
+            to { filter: drop-shadow(0 0 25px var(--neon-blue)); }
+        }
+
+        .cyber-title {
+            font-size: 2.8rem;
+            color: var(--neon-blue);
+            text-shadow: 0 0 15px rgba(0,240,255,0.7), 0 0 30px rgba(217,0,255,0.5);
+            margin-bottom: 10px;
+            letter-spacing: 4px;
+        }
+
+        .cyber-subtitle {
+            font-size: 1.2rem;
+            color: var(--neon-pink);
+            margin-bottom: 25px;
+            text-shadow: 0 0 10px rgba(255,51,204,0.6);
+        }
+
+        .briefing-card {
+            background: rgba(26, 8, 54, 0.92);
+            border: 1px solid var(--neon-magenta);
+            box-shadow: 0 0 35px rgba(157,0,255,0.3), inset 0 0 20px rgba(0,240,255,0.08);
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 780px;
+            text-align: left;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .briefing-card h3 {
+            color: var(--neon-yellow);
+            margin-bottom: 12px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .cyber-input {
+            background: #100224;
+            border: 2px solid var(--neon-pink);
+            color: var(--neon-blue);
+            padding: 12px 20px;
+            font-size: 1.2rem;
+            border-radius: 8px;
+            outline: none;
+            width: 320px;
+            text-align: center;
+            box-shadow: 0 0 15px rgba(255,51,204,0.3);
+            transition: all 0.3s;
+        }
+
+        .cyber-input:focus {
+            box-shadow: 0 0 30px var(--neon-blue);
+            border-color: var(--neon-blue);
+        }
+
+        .cyber-btn {
+            background: linear-gradient(135deg, #320257, #7500ad);
+            border: 2px solid var(--neon-magenta);
+            color: var(--neon-blue);
+            padding: 12px 35px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            text-shadow: 0 0 8px var(--neon-blue);
+            box-shadow: 0 0 20px rgba(217,0,255,0.4);
+            transition: all 0.3s;
+            letter-spacing: 2px;
+        }
+
+        .cyber-btn:hover {
+            background: var(--neon-magenta);
+            color: #fff;
+            box-shadow: 0 0 40px var(--neon-magenta);
+            transform: scale(1.03);
+        }
+        /* Game Layout */
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(26, 8, 54, 0.95);
+            border: 1px solid var(--neon-blue);
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 25px rgba(0,240,255,0.25);
+        }
+
+        .timer-box {
+            font-size: 1.8rem;
+            color: var(--neon-yellow);
+            text-shadow: 0 0 10px rgba(255,204,0,0.6);
+            font-weight: bold;
+        }
+
+        .timer-box.warning {
+            color: var(--neon-red);
+            animation: pulseWarning 0.8s infinite alternate;
+        }
+
+        @keyframes pulseWarning {
+            from { text-shadow: 0 0 5px var(--neon-red); }
+            to { text-shadow: 0 0 25px var(--neon-red); }
+        }
+
+        .team-perf-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(26, 8, 54, 0.85);
+            border: 1px solid var(--surface-border);
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        .perf-item span {
+            color: var(--neon-yellow);
+            font-weight: bold;
+        }
+
+        /* Holographic Mission Card */
+        .holo-card {
+            background: rgba(26, 8, 54, 0.95);
+            border: 1px solid var(--neon-magenta);
+            border-radius: 12px;
+            padding: 35px;
+            box-shadow: 0 0 40px rgba(157,0,255,0.35), inset 0 0 20px rgba(0,240,255,0.06);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .holo-card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, transparent, var(--neon-blue), var(--neon-pink), transparent);
+            animation: scanline 3s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .stage-badge {
+            display: inline-block;
+            background: rgba(217,0,255,0.15);
+            border: 1px solid var(--neon-magenta);
+            color: var(--neon-pink);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 18px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .question-title {
+            font-size: 1.4rem;
+            color: var(--text-main);
+            margin-bottom: 18px;
+            line-height: 1.5;
+        }
+
+        .code-snippet {
+            background: #100224;
+            border-left: 4px solid var(--neon-blue);
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            color: var(--neon-blue);
+            margin: 15px 0;
+            border-radius: 0 6px 6px 0;
+            white-space: pre-wrap;
+            font-size: 0.95rem;
+            box-shadow: inset 0 0 12px rgba(0,0,0,0.8);
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        @media(max-width: 700px) {
+            .options-grid { grid-template-columns: 1fr; }
+        }
+
+        .option-btn {
+            background: rgba(45, 15, 85, 0.85);
+            border: 1px solid var(--surface-border);
+            color: var(--text-main);
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover {
+            border-color: var(--neon-blue);
+            background: rgba(0,240,255,0.15);
+            color: var(--neon-blue);
+            box-shadow: 0 0 15px rgba(0,240,255,0.4);
+        }
+
+        .text-answer-box {
+            margin: 20px 0;
+            display: flex;
+            gap: 15px;
+        }
+
+        .text-answer-input {
+            flex: 1;
+            background: #100224;
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            padding: 12px 15px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        .match-table {
+            width: 100%;
+            margin: 20px 0;
+            border-collapse: collapse;
+        }
+        .match-table th, .match-table td {
+            border: 1px solid var(--surface-border);
+            padding: 12px;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+        .match-table th {
+            background: rgba(26, 8, 54, 0.95);
+            color: var(--neon-pink);
+        }
+        .match-select {
+            background: #100224;
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            padding: 8px;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .action-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 25px;
+            border-top: 1px solid var(--surface-border);
+            padding-top: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .hints-group {
+            display: flex;
+            gap: 10px;
+        }
+        .hint-btn {
+            background: rgba(255,204,0,0.1);
+            border: 1px solid var(--neon-yellow);
+            color: var(--neon-yellow);
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .hint-btn:hover {
+            background: var(--neon-yellow);
+            color: var(--bg-deep);
+            box-shadow: 0 0 12px rgba(255,204,0,0.6);
+        }
+
+        .hint-display {
+            background: rgba(255,204,0,0.08);
+            border-left: 3px solid var(--neon-yellow);
+            padding: 12px 15px;
+            margin-top: 15px;
+            font-size: 0.95rem;
+            color: var(--neon-yellow);
+            display: none;
+            border-radius: 0 6px 6px 0;
+        }
+
+        #notification-banner {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            background: rgba(26, 8, 54, 0.96);
+            border: 2px solid var(--neon-pink);
+            color: var(--neon-pink);
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 0 25px rgba(255,51,204,0.6);
+            display: none;
+            animation: slideInRight 0.3s ease-out;
+            max-width: 380px;
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .thunder-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+            display: none;
+        }
+        .thunder-overlay.active {
+            display: block;
+            animation: thunderFlash 0.4s ease-out both;
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        @keyframes thunderFlash {
+            0% { opacity: 0; background: rgba(255, 34, 85, 0.4); }
+            30% { opacity: 1; background: rgba(255, 255, 255, 0.8); }
+            60% { opacity: 0.3; background: rgba(217, 0, 255, 0.5); }
+            100% { opacity: 0; background: transparent; }
+        }
+
+        .victory-wrapper, .disqualify-wrapper {
+            text-align: center;
+            padding: 40px;
+            background: rgba(26, 8, 54, 0.96);
+            border: 2px solid var(--neon-blue);
+            border-radius: 12px;
+            box-shadow: 0 0 60px rgba(0,240,255,0.45);
+            max-width: 850px;
+            margin: 40px auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .disqualify-wrapper {
+            border-color: var(--neon-red);
+            box-shadow: 0 0 60px rgba(255,34,85,0.5);
+        }
+
+        .victory-title {
+            font-size: 2.8rem;
+            color: var(--neon-blue);
+            text-shadow: 0 0 20px rgba(0,240,255,0.8);
+            margin-bottom: 15px;
+        }
+
+        .disqualify-title {
+            font-size: 2.5rem;
+            color: var(--neon-red);
+            text-shadow: 0 0 20px rgba(255,34,85,0.8);
+            margin-bottom: 15px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .stat-card {
+            background: rgba(10, 2, 36, 0.85);
+            border: 1px solid var(--neon-magenta);
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            color: var(--neon-pink);
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .leaderboard-box {
+            margin-top: 20px;
+            background: rgba(10, 2, 36, 0.9);
+            border: 1px solid var(--surface-border);
+            padding: 15px;
+            border-radius: 8px;
+            max-height: 180px;
+            overflow-y: auto;
+        }
+        .leaderboard-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px dashed rgba(255,255,255,0.1);
+            font-size: 0.85rem;
+        }
+
+        #fireworks-canvas {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 4;
+        }
+    </style>
+</head>
+<body>
+    <div id="intro-splash">
+        <div class="trilogy-text">TECH TRILOGY</div>
+        <div class="trilogy-sub">P R E S E N T S</div>
+    </div>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Falcon Wings on Both Left & Right Sides -->
+    <svg class="falcon-wing-left" viewBox="0 0 100 300" fill="url(#wingGrad)">
+        <defs>
+            <linearGradient id="wingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ff2255" />
+                <stop offset="50%" stop-color="#d900ff" />
+                <stop offset="100%" stop-color="#00f0ff" />
+            </linearGradient>
+        </defs>
+        <path d="M90 10 C50 60, 20 120, 10 180 C25 150, 40 120, 60 90 C50 140, 30 200, 5 270 C40 220, 70 160, 95 100 Z" />
+    </svg>
+    <svg class="falcon-wing-right" viewBox="0 0 100 300" fill="url(#wingGrad)">
+        <path d="M90 10 C50 60, 20 120, 10 180 C25 150, 40 120, 60 90 C50 140, 30 200, 5 270 C40 220, 70 160, 95 100 Z" />
+    </svg>
+
+    <div class="neon-flame-left"></div>
+    <div class="neon-flame-right"></div>
+
+    <div class="thunder-overlay" id="thunderOverlay"></div>
+    <div id="notification-banner"></div>
+
+    <div class="container">
+
+        <!-- WELCOME SCREEN -->
+        <div id="welcome-screen" class="screen active">
+            <div class="welcome-wrapper">
+                <svg class="falcon-circuit-logo" viewBox="0 0 100 100" fill="url(#falconLogoGrad)">
+                    <defs>
+                        <linearGradient id="falconLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#ff2255" />
+                            <stop offset="50%" stop-color="#d900ff" />
+                            <stop offset="100%" stop-color="#00f0ff" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M10 85 L35 85 L45 70 L55 70 L65 85 L90 85" stroke="#8b00ff" stroke-width="2" fill="none" />
+                    <circle cx="35" cy="85" r="3" fill="#00f0ff" />
+                    <circle cx="65" cy="85" r="3" fill="#00f0ff" />
+                    <path d="M50 20 C40 30, 25 45, 20 55 C30 52, 40 48, 50 65 C60 48, 70 52, 80 55 C75 45, 60 30, 50 20 Z" />
+                    <path d="M44 38 L50 45 L56 38 Z" fill="#ffcc00" />
+                </svg>
+
+                <h1 class="cyber-title">OPERATION: CYBER RESCUE</h1>
+                <p class="cyber-subtitle">Secure College Digital Network & Recovery Console</p>
+                
+                <div class="briefing-card">
+                    <h3>🔐 MISSION BRIEFING & RULES</h3>
+                    <p>A cyberattack has disrupted a college's digital network and locked its recovery console. The security team has recovered fragments of an encrypted message and incomplete system logs.</p>
+                    <p style="margin-top: 10px;">Your mission is to identify the suspicious account and locate the logical vulnerability across <strong>5 interconnected mini-stages plus final evidence match-up</strong> within <strong>20 minutes</strong> (Max 120 Points).</p>
+                    <p style="margin-top: 10px; color: var(--neon-red);">⚠️ Warning 1: Incorrect answers trigger security thunder alerts and deduct 30 seconds from your countdown timer!</p>
+                    <p style="margin-top: 6px; color: var(--neon-red);">⚠️ Warning 2: Leaving or switching browser tabs more than once will result in automatic disqualification!</p>
+                </div>
+
+                <div class="input-group">
+                    <input type="text" id="teamNameInput" class="cyber-input" placeholder="ENTER TEAM NAME" maxlength="20" autocomplete="off">
+                </div>
+                <button class="cyber-btn" onclick="startGame()">START MISSION</button>
+            </div>
+        </div>
+
+        <!-- GAME SCREEN -->
+        <div id="game-screen" class="screen">
+            <div class="game-header">
+               <div>
+                   <strong style="color: var(--neon-blue);">OPERATION:</strong> <span style="color: var(--neon-pink);">CYBER RESCUE</span>
+               </div>
+               <div class="timer-box" id="timerDisplay">20:00</div>
+            </div>
+
+            <div class="team-perf-bar">
+                <div class="perf-item">TEAM: <span id="perfTeamName">-</span></div>
+                <div class="perf-item">SCORE: <span id="perfScore">0</span> / 120 PTS</div>
+                <div class="perf-item">MISTAKES: <span id="perfMistakes">0</span></div>
+                <div class="perf-item">PENALTIES: <span id="perfPenalties">0s</span></div>
+            </div>
+
+            <div class="holo-card" id="questionCard"></div>
+        </div>
+
+        <!-- VICTORY SCREEN -->
+        <div id="victory-screen" class="screen">
+            <div class="victory-wrapper">
+                <canvas id="fireworks-canvas"></canvas>
+                <h1 class="victory-title">🏆 MISSION COMPLETE!</h1>
+                <p style="font-size: 1.2rem; color: var(--text-main);" id="victoryGreeting">Congratulations Team!</p>
+                <p style="color: var(--text-dim); margin-top: 5px;">Congratulations on completing all five stages of Operation: Cyber Rescue!</p>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div>TEAM NAME</div>
+                        <div class="stat-value" id="finalTeamName">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div>TIME REMAINING</div>
+                        <div class="stat-value" id="finalTime">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div>FINAL SCORE</div>
+                        <div class="stat-value" id="finalScore">0/120</div>
+                    </div>
+                </div>
+
+                <div style="text-align: left; margin-top: 15px;">
+                    <h4 style="color: var(--neon-blue); margin-bottom: 8px;">📊 LIVE SYSTEM LEADERBOARD</h4>
+                    <div class="leaderboard-box" id="leaderboardList"></div>
+                </div>
+
+                <p style="color: var(--neon-pink); margin: 20px 0 15px 0;">✨ Investigate the Clues. Debug the Errors. Protect the Network.</p>
+                <button class="cyber-btn" onclick="location.reload()">REPLAY MISSION</button>
+            </div>
+        </div>
+
+        <!-- DISQUALIFICATION SCREEN -->
+        <div id="disqualify-screen" class="screen">
+            <div class="disqualify-wrapper">
+                <h1 class="disqualify-title">🚫 SECURITY DISQUALIFICATION</h1>
+                <p style="font-size: 1.2rem; color: var(--text-main); margin-bottom: 15px;">Tab switching or site exit detected multiple times!</p>
+                <p style="color: var(--neon-red); margin-bottom: 25px;">Your session has been terminated by the protocol firewall.</p>
+                <button class="cyber-btn" onclick="location.reload()">TRY AGAIN</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (!audioCtx) return;
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            const now = audioCtx.currentTime;
+
+            if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(800, now);
+                osc.frequency.exponentialRampToValueAtTime(400, now + 0.05);
+                gain.gain.setValueAtTime(0.1, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+                osc.start(now);
+                osc.stop(now + 0.05);
+            } else if (type === 'correct') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(523.25, now);
+                osc.frequency.setValueAtTime(659.25, now + 0.1);
+                osc.frequency.setValueAtTime(783.99, now + 0.2);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+                osc.start(now);
+                osc.stop(now + 0.4);
+            } else if (type === 'thunder') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(120, now);
+                osc.frequency.linearRampToValueAtTime(40, now + 0.5);
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+                osc.start(now);
+                osc.stop(now + 0.5);
+            } else if (type === 'unlock') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(440, now);
+                osc.frequency.exponentialRampToValueAtTime(880, now + 0.3);
+                gain.gain.setValueAtTime(0.15, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+                osc.start(now);
+                osc.stop(now + 0.3);
+            } else if (type === 'victory') {
+                const notes = [523.25, 659.25, 783.99, 1046.50];
+                notes.forEach((freq, i) => {
+                    const o = audioCtx.createOscillator();
+                    const g = audioCtx.createGain();
+                    o.connect(g);
+                    g.connect(audioCtx.destination);
+                    o.frequency.setValueAtTime(freq, now + i * 0.15);
+                    g.gain.setValueAtTime(0.2, now + i * 0.15);
+                    g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.15 + 0.3);
+                    o.start(now + i * 0.15);
+                    o.stop(now + i * 0.15 + 0.3);
+                });
+            }
+        }
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let dnaAngle = 0;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        for (let i = 0; i < 90; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 0.5,
+                vy: (Math.random() - 0.5) * 0.5,
+                size: Math.random() * 2 + 0.5
+            });
+        }
+
+        function drawDNAHelix() {
+            dnaAngle += 0.015;
+            const helixX = canvas.width - 70;
+            const spacing = 22;
+            for (let y = 0; y < canvas.height; y += spacing) {
+                let x1 = helixX + Math.sin(y * 0.02 + dnaAngle) * 30;
+                let x2 = helixX + Math.sin(y * 0.02 + dnaAngle + Math.PI) * 30;
+
+                ctx.fillStyle = '#ff33cc';
+                ctx.beginPath();
+                ctx.arc(x1, y, 2.5, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#00f0ff';
+                ctx.beginPath();
+                ctx.arc(x2, y, 2.5, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.strokeStyle = 'rgba(139, 0, 255, 0.2)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(x1, y);
+                ctx.lineTo(x2, y);
+                ctx.stroke();
+            }
+        }
+
+        function animateBg() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            let grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            grad.addColorStop(0, '#100224');
+            grad.addColorStop(0.5, '#1e083c');
+            grad.addColorStop(1, '#0c011a');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = 'rgba(0, 240, 255, 0.45)';
+            ctx.strokeStyle = 'rgba(217, 0, 255, 0.07)';
+
+            particles.forEach((p, index) => {
+                p.x += p.vx;
+                p.y += p.vy;
+                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+
+                for (let j = index + 1; j < particles.length; j++) {
+                    let p2 = particles[j];
+                    let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+                    if (dist < 120) {
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                }
+            });
+
+            drawDNAHelix();
+            requestAnimationFrame(animateBg);
+        }
+        animateBg();
+
+        const gameStages = [
+            {
+                title: "Stage 1 – Cipher Decode (Max 25 Pts)",
+                pointsPerQ: 5,
+                questions: [
+                    {
+                        type: "options",
+                        prompt: "Question 1 – Decode the Encrypted Message",
+                        subtitle: "Encrypted Message: FKHFN ORJLQ WLPHV",
+                        hint1: "Each letter has been shifted forward by 3 positions.",
+                        hint2: "Shift each letter backward by 3 positions to reveal what system logs to inspect.",
+                        options: [
+                            "A) Check network traffic",
+                            "B) Check login times",
+                            "C) Change access passwords",
+                            "D) Track system updates"
+                        ],
+                        correct: 1
+                    },
+                    {
+                        type: "options",
+                        prompt: "Question 2 – Find the Backdoor",
+                        subtitle: "Encrypted Message: ILQG WKH EDFNGRRU",
+                        hint1: "Use the same Caesar cipher method as Question 1.",
+                        hint2: "The decoded phrase points to a hidden vulnerability or secret entry point in system files.",
+                        options: [
+                            "A) Find the firewall",
+                            "B) Find the backup file",
+                            "C) Find the backdoor",
+                            "D) Find the browser"
+                        ],
+                        correct: 2
+                    },
+                    {
+                        type: "options",
+                        prompt: "Question 3 – Numeric Code Decoder",
+                        subtitle: "Encrypted Code: 14 – 5 – 20 – 23 – 15 – 18 – 11",
+                        hint1: "Each number represents a letter of the alphabet (A=1, B=2...).",
+                        hint2: "Translating the numbers in sequence reveals an essential infrastructure component.",
+                        options: ["A) SECURITY", "B) PASSWORD", "C) NETWORK", "D) LOGIN"],
+                        correct: 2
+                    },
+                    {
+                        type: "options",
+                        prompt: "Question 4 – The Emoji Code Trap",
+                        subtitle: "Emoji Sequence: 🔑 🌐 🛡️ 🔒 💻 ⚡ 🧩\nKey: 🔑=C, 🌐=C, 🛡️=Q, 🔒=L, 💻=P, ⚡=L, 🧩=X\nRule: Shift 1st forward by 1, 2nd by 2... up to 7, then reverse sequence.",
+                        hint1: "Replace each emoji with the letter shown in the letter key.",
+                        hint2: "Apply the incremental shift rule carefully before reversing the sequence.",
+                        options: ["A) ENCRYPT", "B) ERUPTED", "C) PROTECT", "D) SECURED"],
+                        correct: 1
+                    },
+                    {
+                        type: "text",
+                        prompt: "Question 5 – Emoji Logic Lock",
+                        subtitle: "🔐 + 🔐 = 12\n🔑 + 🔑 + 🔐 = 14\n💻 + 🔑 = 9\n🔐 − 🔑 + 💻 = ?",
+                        hint1: "Start with the equation containing two identical lock emojis to find 🔐.",
+                        hint2: "Substitute known emoji values step-by-step into the final arithmetic expression (1 to 10).",
+                        answer: "7"
+                    }
+                ]
+            },
+            {
+                title: "Stage 2 – Binary Code Converter (Max 20 Pts)",
+                pointsPerQ: 4,
+                questions: [
+                    {
+                        type: "options",
+                        prompt: "Question 1 – Binary to Word",
+                        subtitle: "Binary Message: 01000011 01001000 01000101 01000011 01001011",
+                        hint1: "Each group contains 8 bits.",
+                        hint2: "Convert each 8-bit group into its ASCII character to reveal a verification command.",
+                        options: ["A) CHECK", "B) LOGIN", "C) SERVER", "D) ACCESS"],
+                        correct: 0
+                    },
+                    {
+                        type: "options",
+                        prompt: "Question 2 – Binary to Number",
+                        subtitle: "Binary Code: 00001000",
+                        hint1: "Convert the binary number into decimal.",
+                        hint2: "Identify the active binary bit position from right to left (1, 2, 4, 8...).",
+                        options: ["A) 4", "B) 6", "C) 8", "D) 10"],
+                        correct: 2
+                    },
+                    {
+                        type: "options",
+                        prompt: "Question 3 – Find the Correct Binary",
+                        subtitle: "Which binary code represents the letter A?",
+                        hint1: "Each option represents a different character.",
+                        hint2: "Look up or calculate the standard 8-bit binary representation of ASCII 65.",
+                        options: ["A) 01000001", "B) 01000010", "C) 01000011", "D) 01000100"],
+                        correct: 0
+                    },
+                    {
+                        type: "options",
+                        prompt: "Question 4 – Complete the Pattern",
+                        subtitle: "What comes next in this binary sequence?\n0001, 0010, 0011, 0100, ____",
+                        hint1: "Treat each binary sequence as an increasing counter.",
+                        hint2: "Add 1 to decimal 4 and convert the result back to 4-bit binary.",
+                        options: ["A) 0101", "B) 0110", "C) 0111", "D) 1000"],
+                        correct: 0
+                    },
+                    {
+                        type: "options",
+                        prompt: "Question 5 – Find the Next Investigation Step",
+                        subtitle: "Binary Message: 01000011 01001111 01000100 01000101",
+                        hint1: "Read each 8-bit group as an ASCII character.",
+                        hint2: "The decoded word is the primary asset that developers debug in the next stage.",
+                        options: ["A) LOGIN", "B) CODE", "C) SERVER", "D) ALERT"],
+                        correct: 1
+                    }
+                ]
+                },
+            {
+                title: "Stage 3 – Code Debugger (Max 25 Pts)",
+                pointsPerQ: 5,
+                questions: [
+                    {
+                        type: "options",
+                        prompt: "Task 1 – Fix the Bug",
+                        subtitle: "a = 10\nb = 5\ntotal = a - b\nprint(total)",
+                        hint1: "Read the variable names carefully.",
+                        hint2: "Verify if the current arithmetic operator yields a sum or a difference.",
+                        options: ["A) total = a * b", "B) total = a + b", "C) total = a / b", "D) total = b - a"],
+                        correct: 1
+                    },
+                    {
+                        type: "options",
+                        prompt: "Task 2 – Trace the System Error",
+                        subtitle: "expected_code = \"RESCUE\"\nentered_code = \"RESCUE\"\nif entered_code == expected_code:\n    print(\"Access Denied\")\nelse:\n    print(\"Access Granted\")",
+                        hint1: "Observe the evaluation when both string codes are identical.",
+                        hint2: "Correct the logic so matching inputs output the appropriate success string.",
+                        options: [
+                            "A) Change == to !=",
+                            "B) Print 'Access Granted' when codes match",
+                            "C) Change both codes to 'DENIED'",
+                            "D) Remove the else block"
+                        ],
+                        correct: 0
+                    },
+                    {
+                        type: "options",
+                        prompt: "Task 3 – Predict the Output",
+                        subtitle: "failed_attempts = 2\nfailed_attempts = failed_attempts + 2\nif failed_attempts >= 4:\n    print(\"Security Alert\")\nelse:\n    print(\"System Safe\")",
+                        hint1: "Calculate the updated value of failed_attempts.",
+                        hint2: "Evaluate whether 4 satisfies the condition >= 4.",
+                        options: ["A) System Safe", "B) Security Alert", "C) Access Granted", "D) Login Successful"],
+                        correct: 1
+                    },
+                    {
+                        type: "options",
+                        prompt: "Task 4 – Identify the Logical Error",
+                        subtitle: "expected_code = 2468\nentered_code = 2468\nif entered_code == expected_code:\n    print(\"Recovery Failed\")\nelse:\n    print(\"Server Restored\")",
+                        hint1: "Compare expected_code and entered_code values.",
+                        hint2: "Ensure the true branch outputs a success confirmation rather than a failure message.",
+                        options: [
+                            "A) Change == to !=",
+                            "B) Print 'Server Restored' when codes match",
+                            "C) Change entered_code to 1234",
+                            "D) Print 'Recovery Failed' in both branches"
+                        ],
+                        correct: 0
+                    },
+                    {
+                        type: "options",
+                        prompt: "Task 5 – Complete the Missing Code",
+                        subtitle: "recovery_code = 1357\nentered_code = 1357\nif entered_code ___ recovery_code:\n    print(\"Server Unlocked\")\nelse:\n    print(\"Access Denied\")",
+                        hint1: "Determine what condition unlocks the server.",
+                        hint2: "Select the comparison operator that checks exact equality.",
+                        options: ["A) !=", "B) ==", "C) >", "D) <"],
+                        correct: 1
+                    }
+                ]
+            },
+            {
+                title: "Stage 4 – Phishing Mail Hunter (Max 20 Pts)",
+                pointsPerQ: 10,
+                questions: [
+                    {
+                        type: "options",
+                        prompt: "Task 1 – Identify Digital Data",
+                        subtitle: "Recovered Evidence:\n- Suspicious email requests college account password.\n- Attacker attempts to access confidential files.\n- Unregistered website links included.",
+                        hint1: "Consider broad categories of electronic information.",
+                        hint2: "Select the technical term covering records, credentials, and digital files.",
+                        options: [
+                            "A) Network Protocol",
+                            "B) System Software",
+                            "C) Digital Data",
+                            "D) User Authentication"
+                        ],
+                        correct: 2
+                    },
+                    {
+                        type: "options",
+                        prompt: "Task 2 – Identify the Cyberattack",
+                        subtitle: "The attacker sends a suspicious email to trick users into revealing sensitive information or clicking malicious links.",
+                        hint1: "The attack vector involves social engineering via email.",
+                        hint2: "Name the attack where deceptive messages impersonate trustworthy entities.",
+                        options: [
+                            "A) Malware Attack",
+                            "B) Phishing Attack",
+                            "C) Denial-of-Service Attack",
+                            "D) Brute-Force Attack"
+                        ],
+                        correct: 1
+                    }
+                ]
+            },
+            {
+                title: "Stage 5 – Logic Grid Mystery (Max 10 Pts)",
+                pointsPerQ: 10,
+                questions: [
+                    {
+                        type: "options",
+                        prompt: "System Log Analysis",
+                        subtitle: "🖥️ System Log:\nLaptop 1 | 10:15 AM | Student Records\nLaptop 2 | 11:20 AM | Public Portal\nLaptop 3 | 11:00 AM | Confidential Files\nLaptop 2 | 09:45 AM | Public Portal\n\n🚨 Suspicious activity occurred during the 11 AM hour.",
+                        hint1: "Correlate timestamp entries with confidential access.",
+                        hint2: "Identify the specific device that accessed sensitive files during the 11 AM hour.",
+                        options: [
+                            "A) Laptop 3 logged in at 10 AM, suspicious activity at 11 AM.",
+                            "B) Laptop 2 logged in at 11 AM, wrong device.",
+                            "C) Laptop 1 logged in at 11 AM.",
+                            "D) Laptop 3 accessed confidential files at 11:00 AM."
+                        ],
+                        correct: 3
+                    }
+                ]
+            },
+            {
+                title: "Final Evidence Match-Up (Max 20 Pts)",
+                pointsPerQ: 20,
+                isMatchUp: true,
+                questions: [
+                    {
+                        type: "match",
+                        prompt: "Final Evidence Match-Up",
+                        subtitle: "Match the answers discovered in Stages 1–4 with their corresponding clues.",
+                        pairs: [
+                            { id: 1, label: "1. ERUPTED" },
+                            { id: 2, label: "2. CHECK LOGIN TIMES" },
+                            { id: 3, label: "3. DIGITAL DATA" },
+                            { id: 4, label: "4. BINARY CODE" }
+                        ],
+                        options: [
+                            "A. The type of information targeted",
+                            "B. The suspicious login investigation",
+                            "C. The final security action",
+                            "D. The hidden message decoding method"
+                        ],
+                        correctMatch: { 1: "B", 2: "D", 3: "A", 4: "C" }
+                    }
+                ]
+            }
+        ];
+        let teamName = "";
+        let currentStageIdx = 0;
+        let currentQIdx = 0;
+        let timeLeft = 1200;
+        let timerInterval = null;
+        let score = 0;
+        let mistakes = 0;
+        let totalPenalties = 0;
+        let hint1Unlocked = false;
+        let hint2Unlocked = false;
+        let gameStarted = false;
+        let blurCount = 0;
+
+        document.addEventListener("visibilitychange", () => {
+            if (document.hidden && gameStarted) {
+                blurCount++;
+                if (blurCount > 1) {
+                    triggerDisqualification();
+                } else {
+                    showNotification("⚠️ Warning: Leaving the game tab again will result in immediate disqualification!");
+                }
+            }
+        });
+
+        function triggerDisqualification() {
+            clearInterval(timerInterval);
+            gameStarted = false;
+            playSound("thunder");
+            document.getElementById("game-screen").classList.remove("active");
+            document.getElementById("disqualify-screen").classList.add("active");
+        }
+
+        function startGame() {
+            const input = document.getElementById("teamNameInput");
+            teamName = input.value.trim();
+            if (!teamName) {
+                showNotification("⚠️ Please enter your team name!");
+                playSound("thunder");
+                return;
+            }
+
+            playSound("unlock");
+            gameStarted = true;
+            document.getElementById("perfTeamName").textContent = teamName;
+            document.getElementById("welcome-screen").classList.remove("active");
+            document.getElementById("game-screen").classList.add("active");
+
+            startTimer();
+            loadQuestion();
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                let mins = Math.floor(timeLeft / 60);
+                let secs = timeLeft % 60;
+                let display = `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
+                
+                const timerEl = document.getElementById("timerDisplay");
+                timerEl.textContent = display;
+
+                if (timeLeft <= 180) {
+                    timerEl.classList.add("warning");
+                }
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    alert("⏰ TIME EXPIRED! Mission Failed.");
+                    location.reload();
+                }
+            }, 1000);
+        }
+
+        function showNotification(msg) {
+            const banner = document.getElementById("notification-banner");
+            banner.textContent = msg;
+            banner.style.display = "block";
+            setTimeout(() => {
+                banner.style.display = "none";
+            }, 3000);
+        }
+
+        function triggerThunder() {
+            const overlay = document.getElementById("thunderOverlay");
+            overlay.classList.add("active");
+            setTimeout(() => {
+                overlay.classList.remove("active");
+            }, 400);
+        }
+
+        function updatePerformancePanel() {
+            document.getElementById("perfScore").textContent = score;
+            document.getElementById("perfMistakes").textContent = mistakes;
+            document.getElementById("perfPenalties").textContent = `${totalPenalties}s`;
+        }
+
+        function loadQuestion() {
+            const stage = gameStages[currentStageIdx];
+            const q = stage.questions[currentQIdx];
+            const card = document.getElementById("questionCard");
+
+            hint1Unlocked = false;
+            hint2Unlocked = false;
+            updatePerformancePanel();
+
+            let html = `
+                <div class="stage-badge">${stage.title}</div>
+                <div class="question-title">${q.prompt}</div>
+                <div style="color: var(--text-dim); margin-bottom: 15px; white-space: pre-wrap;">${q.subtitle || ''}</div>
+            `;
+
+            if (q.code) {
+                html += `<div class="code-snippet">${q.code}</div>`;
+            }
+
+            if (q.type === 'options') {
+                html += `<div class="options-grid">`;
+                q.options.forEach((opt, idx) => {
+                    html += `<button class="option-btn" onclick="checkAnswer(${idx})">${opt}</button>`;
+                });
+                html += `</div>`;
+            } else if (q.type === 'text') {
+                html += `
+                    <div class="text-answer-box">
+                        <input type="text" id="textAnswerInput" class="text-answer-input" placeholder="ENTER YOUR ANSWER..." autocomplete="off">
+                        <button class="cyber-btn" onclick="checkTextAnswer()">SUBMIT</button>
+                    </div>
+                `;
+            } else if (q.type === 'match') {
+                html += `
+                    <table class="match-table">
+                        <tr><th>Column A (Previous Stage Answers)</th><th>Column B (What They Reveal)</th></tr>
+                `;
+                q.pairs.forEach((pair) => {
+                    html += `
+                        <tr>
+                            <td>${pair.label}</td>
+                            <td>
+                                <select id="matchSel_${pair.id}" class="match-select">
+                                    <option value="">-- Select Match --</option>
+                                    ${q.options.map(opt => `<option value="${opt[0]}">${opt}</option>`).join('')}
+                                </select>
+                            </td>
+                        </tr>
+                    `;
+                });
+                html += `</table>
+                    <button class="cyber-btn" onclick="checkMatchAnswer()" style="margin-top: 15px;">SUBMIT MATCH</button>
+                `;
+            }
+
+            if (!stage.isMatchUp) {
+                html += `
+                    <div class="action-row">
+                        <div class="hints-group">
+                            <button class="hint-btn" onclick="revealHint(1)">💡 DEFAULT HINT</button>
+                            <button class="hint-btn" onclick="revealHint(2)" style="border-color: var(--neon-pink); color: var(--neon-pink);">⚡ ADVANCED HINT (-15s)</button>
+                        </div>
+                        <div style="color: var(--text-dim); font-size: 0.85rem;">Question ${currentQIdx + 1} of ${stage.questions.length}</div>
+                    </div>
+                    <div class="hint-display" id="hintDisplay"></div>
+                `;
+            } else {
+                html += `
+                    <div class="action-row">
+                        <div></div>
+                        <div style="color: var(--text-dim); font-size: 0.85rem;">Final Evidence Match-Up</div>
+                    </div>
+                `;
+            }
+
+            card.innerHTML = html;
+        }
+
+        function revealHint(type) {
+            playSound("click");
+            const hintBox = document.getElementById("hintDisplay");
+            const q = gameStages[currentStageIdx].questions[currentQIdx];
+
+            if (type === 1) {
+                hintBox.style.display = "block";
+                hintBox.innerHTML = `<strong>DEFAULT HINT:</strong> ${q.hint1}`;
+                showNotification("💡 Default Hint Unlocked.");
+            } else if (type === 2) {
+                if (!hint2Unlocked) {
+                    hint2Unlocked = true;
+                    timeLeft -= 15;
+                    totalPenalties += 15;
+                    if (timeLeft < 0) timeLeft = 0;
+                    updatePerformancePanel();
+                    showNotification("⚡ Advanced Hint Unlocked! -15s Penalty.");
+                }
+                hintBox.style.display = "block";
+                hintBox.innerHTML = `<strong>ADVANCED HINT:</strong> ${q.hint2}`;
+            }
+        }
+
+        function handleWrongAnswer() {
+            playSound("thunder");
+            triggerThunder();
+            mistakes++;
+            totalPenalties += 30;
+            timeLeft -= 30; 
+            if (timeLeft < 0) timeLeft = 0;
+            showNotification("❌ WRONG ANSWER! -30s Penalty & Thunder Alert.");
+            advanceQuestion();
+        }
+
+        function handleCorrectAnswer() {
+            playSound("correct");
+            const stage = gameStages[currentStageIdx];
+            score += stage.pointsPerQ;
+            showNotification(`✔ ACCESS GRANTED! +${stage.pointsPerQ} Points.`);
+            advanceQuestion();
+        }
+
+        function advanceQuestion() {
+            currentQIdx++;
+            if (currentQIdx >= gameStages[currentStageIdx].questions.length) {
+                currentStageIdx++;
+                currentQIdx = 0;
+                if (currentStageIdx >= gameStages.length) {
+                    triggerVictory();
+                    return;
+                } else {
+                    playSound("unlock");
+                    showNotification("🔓 STAGE UNLOCKED! Proceeding to next level.");
+                }
+            }
+            loadQuestion();
+        }
+
+        function checkAnswer(selectedIdx) {
+            const stage = gameStages[currentStageIdx];
+            const q = stage.questions[currentQIdx];
+            if (selectedIdx === q.correct) {
+                handleCorrectAnswer();
+            } else {
+                handleWrongAnswer();
+            }
+        }
+
+        function checkTextAnswer() {
+            const input = document.getElementById("textAnswerInput");
+            if (!input) return;
+            const userVal = input.value.trim().toUpperCase();
+            const stage = gameStages[currentStageIdx];
+            const q = stage.questions[currentQIdx];
+
+            if (userVal === q.answer.toUpperCase()) {
+                handleCorrectAnswer();
+            } else {
+                handleWrongAnswer();
+            }
+        }
+
+        function checkMatchAnswer() {
+            const q = gameStages[currentStageIdx].questions[currentQIdx];
+            let allCorrect = true;
+            for (let pair of q.pairs) {
+                const sel = document.getElementById(`matchSel_${pair.id}`);
+                if (!sel || sel.value !== q.correctMatch[pair.id]) {
+                    allCorrect = false;
+                    break;
+                }
+            }
+
+            if (allCorrect) {
+                handleCorrectAnswer();
+            } else {
+                handleWrongAnswer();
+            }
+        }
+
+        function saveToDatabase() {
+            let records = JSON.parse(localStorage.getItem('cyber_rescue_scores_v5') || '[]');
+            records.push({
+                name: teamName,
+                score: score,
+                mistakes: mistakes,
+                penalties: totalPenalties,
+                time: document.getElementById("finalTime").textContent
+            });
+            records.sort((a, b) => b.score - a.score || a.mistakes - b.mistakes);
+            localStorage.setItem('cyber_rescue_scores_v5', JSON.stringify(records));
+
+            let listHtml = '';
+            records.slice(0, 5).forEach((rec, idx) => {
+                let m = rec.mistakes !== undefined ? rec.mistakes : 0;
+                let p = rec.penalties !== undefined ? rec.penalties : 0;
+                listHtml += `<div class="leaderboard-row"><span>#${idx+1} ${rec.name}</span><span>${rec.score}/120 PTS | Mistakes: ${m} | Pen: ${p}s (${rec.time})</span></div>`;
+            });
+            document.getElementById("leaderboardList").innerHTML = listHtml;
+        }
+
+        function startFireworks() {
+            const fwCanvas = document.getElementById("fireworks-canvas");
+            fwCanvas.width = fwCanvas.offsetWidth;
+            fwCanvas.height = fwCanvas.offsetHeight;
+            const fCtx = fwCanvas.getContext("2d");
+            let fParticles = [];
+
+            for (let i = 0; i < 60; i++) {
+                fParticles.push({
+                    x: fwCanvas.width / 2,
+                    y: fwCanvas.height / 2,
+                    vx: (Math.random() - 0.5) * 8,
+                    vy: (Math.random() - 0.5) * 8,
+                    color: ['#00f0ff', '#ff33cc', '#ffcc00', '#d900ff'][Math.floor(Math.random() * 4)],
+                    alpha: 1
+                });
+            }
+
+            function loopFireworks() {
+                fCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
+                fParticles.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.alpha -= 0.02;
+                    fCtx.save();
+                    fCtx.globalAlpha = Math.max(p.alpha, 0);
+                    fCtx.fillStyle = p.color;
+                    fCtx.beginPath();
+                    fCtx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+                    fCtx.fill();
+                    fCtx.restore();
+                });
+                requestAnimationFrame(loopFireworks);
+            }
+            loopFireworks();
+        }
+        function triggerVictory() {
+            clearInterval(timerInterval);
+            gameStarted = false;
+            playSound("victory");
+            document.getElementById("game-screen").classList.remove("active");
+            document.getElementById("victory-screen").classList.add("active");
+
+            document.getElementById("victoryGreeting").textContent = `Congratulations ${teamName} 🎉`;
+            document.getElementById("finalTeamName").textContent = teamName;
+            let mins = Math.floor(timeLeft / 60);
+            let secs = timeLeft % 60;
+            document.getElementById("finalTime").textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+            document.getElementById("finalScore").textContent = `${score}/120`;
+
+            saveToDatabase();
+            startFireworks();
+        }
+    </script>
+</body>
+</html>
